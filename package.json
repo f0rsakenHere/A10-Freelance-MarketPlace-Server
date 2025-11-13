@@ -1,0 +1,32 @@
+{
+  "name": "a10-freelance-marketplace-server",
+  "version": "1.0.0",
+  "description": "Backend API for Freelance Marketplace",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f0rsakenHere/A10-Freelance-MarketPlace-Server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/f0rsakenHere/A10-Freelance-MarketPlace-Server/issues"
+  },
+  "homepage": "https://github.com/f0rsakenHere/A10-Freelance-MarketPlace-Server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "nodemon": "^3.1.11"
+  }
+}
