@@ -19,11 +19,11 @@ async function connectDB() {
       return db;
     }
 
-    await client.connect();
+    // await client.connect();
     db = client.db(process.env.DB_NAME || "freelanceMarketplace");
 
-    console.log("Connected to MongoDB");
-    await db.command({ ping: 1 });
+    // console.log("Connected to MongoDB");
+    // await db.command({ ping: 1 });
 
     return db;
   } catch (error) {
