@@ -3,7 +3,6 @@ const router = express.Router();
 const { getDB } = require("../config/database");
 const JobModel = require("../models/job.model");
 
-// Middleware to get job model instance
 const getJobModel = (req, res, next) => {
   try {
     const db = getDB();
@@ -18,12 +17,8 @@ const getJobModel = (req, res, next) => {
   }
 };
 
-// Apply middleware to all routes
 router.use(getJobModel);
 
-// ==================== JOB ROUTES ====================
-
-// Get latest 6 jobs (for homepage)
 router.get("/latest", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
@@ -43,7 +38,6 @@ router.get("/latest", async (req, res) => {
   }
 });
 
-// Get all jobs with optional sorting
 router.get("/", async (req, res) => {
   try {
     const { sortBy = "postedDate", sortOrder = "desc" } = req.query;
@@ -65,7 +59,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get jobs by category
 router.get("/category/:category", async (req, res) => {
   try {
     const { category } = req.params;
@@ -85,7 +78,6 @@ router.get("/category/:category", async (req, res) => {
   }
 });
 
-// Get jobs by user email (My Added Jobs)
 router.get("/my-jobs/:email", async (req, res) => {
   try {
     const { email } = req.params;
@@ -105,7 +97,6 @@ router.get("/my-jobs/:email", async (req, res) => {
   }
 });
 
-// Get single job by ID
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -129,7 +120,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Add new job
 router.post("/", async (req, res) => {
   try {
     const jobData = req.body;
@@ -153,7 +143,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update job
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -191,7 +180,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete job
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -229,9 +217,6 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// ==================== ACCEPTED JOBS ROUTES ====================
-
-// Accept a job
 router.post("/accept", async (req, res) => {
   try {
     const { jobId, userEmail, userName } = req.body;
@@ -270,7 +255,6 @@ router.post("/accept", async (req, res) => {
   }
 });
 
-// Get accepted jobs by user
 router.get("/accepted/:email", async (req, res) => {
   try {
     const { email } = req.params;
@@ -290,7 +274,6 @@ router.get("/accepted/:email", async (req, res) => {
   }
 });
 
-// Remove accepted job (Done/Cancel)
 router.delete("/accepted/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -326,9 +309,6 @@ router.delete("/accepted/:id", async (req, res) => {
   }
 });
 
-// ==================== STATS ROUTE (Optional) ====================
-
-// Get statistics
 router.get("/stats/all", async (req, res) => {
   try {
     const stats = await req.jobModel.getStats();

@@ -22,15 +22,12 @@ async function connectDB() {
     await client.connect();
     db = client.db(process.env.DB_NAME || "freelanceMarketplace");
 
-    console.log("✅ Successfully connected to MongoDB!");
-
-    // Test connection
+    console.log("Connected to MongoDB");
     await db.command({ ping: 1 });
-    console.log("✅ Database ping successful!");
 
     return db;
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error);
     throw error;
   }
 }
@@ -46,7 +43,7 @@ async function closeDB() {
   if (client) {
     await client.close();
     db = null;
-    console.log("✅ Database connection closed");
+    console.log("Database connection closed");
   }
 }
 

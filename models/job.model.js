@@ -6,19 +6,17 @@ class JobModel {
     this.acceptedJobsCollection = db.collection("acceptedJobs");
   }
 
-  // Create indexes for better performance
   async createIndexes() {
     try {
       await this.collection.createIndex({ userEmail: 1 });
       await this.collection.createIndex({ category: 1 });
       await this.collection.createIndex({ postedDate: -1 });
-      console.log("✅ Database indexes created");
+      console.log("Database indexes created");
     } catch (error) {
       console.error("Index creation error:", error);
     }
   }
 
-  // Validate job data
   validateJob(jobData) {
     const required = [
       "title",
@@ -37,7 +35,6 @@ class JobModel {
     return true;
   }
 
-  // Add a new job
   async addJob(jobData) {
     this.validateJob(jobData);
 
@@ -52,7 +49,6 @@ class JobModel {
     return result;
   }
 
-  // Get all jobs with optional sorting
   async getAllJobs(sortBy = "postedDate", sortOrder = -1) {
     const sort = {};
     sort[sortBy] = sortOrder;
@@ -62,7 +58,6 @@ class JobModel {
     return jobs;
   }
 
-  // Get latest N jobs for homepage
   async getLatestJobs(limit = 6) {
     const jobs = await this.collection
       .find({})
@@ -73,7 +68,6 @@ class JobModel {
     return jobs;
   }
 
-  // Get jobs by category
   async getJobsByCategory(category) {
     const jobs = await this.collection
       .find({ category })
@@ -83,7 +77,6 @@ class JobModel {
     return jobs;
   }
 
-  // Get single job by ID
   async getJobById(id) {
     if (!ObjectId.isValid(id)) {
       throw new Error("Invalid job ID format");
@@ -98,7 +91,6 @@ class JobModel {
     return job;
   }
 
-  // Get jobs added by specific user
   async getJobsByUser(userEmail) {
     if (!userEmail) {
       throw new Error("User email is required");
@@ -112,20 +104,17 @@ class JobModel {
     return jobs;
   }
 
-  // Update job (only by owner)
   async updateJob(id, userEmail, updateData) {
     if (!ObjectId.isValid(id)) {
       throw new Error("Invalid job ID format");
     }
 
-    // First, verify ownership
     const existingJob = await this.getJobById(id);
 
     if (existingJob.userEmail !== userEmail) {
       throw new Error("Unauthorized: You can only update your own jobs");
     }
 
-    // Remove fields that shouldn't be updated
     const {
       _id,
       postedDate,
@@ -151,13 +140,11 @@ class JobModel {
     return result;
   }
 
-  // Delete job (only by owner)
   async deleteJob(id, userEmail) {
     if (!ObjectId.isValid(id)) {
       throw new Error("Invalid job ID format");
     }
 
-    // Verify ownership before delete
     const job = await this.getJobById(id);
 
     if (job.userEmail !== userEmail) {
@@ -165,14 +152,11 @@ class JobModel {
     }
 
     const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
-
-    // Also delete from accepted jobs if any
     await this.acceptedJobsCollection.deleteMany({ jobId: id });
 
     return result;
   }
 
-  // Accept a job
   async acceptJob(jobId, userEmail, userName) {
     if (!ObjectId.isValid(jobId)) {
       throw new Error("Invalid job ID format");
@@ -180,12 +164,10 @@ class JobModel {
 
     const job = await this.getJobById(jobId);
 
-    // Don't allow accepting own jobs
     if (job.userEmail === userEmail) {
       throw new Error("You cannot accept your own job posting");
     }
 
-    // Check if already accepted by this user
     const existingAcceptance = await this.acceptedJobsCollection.findOne({
       jobId: jobId,
       acceptedByEmail: userEmail,
@@ -213,7 +195,6 @@ class JobModel {
     return result;
   }
 
-  // Get accepted jobs by user
   async getAcceptedJobsByUser(userEmail) {
     if (!userEmail) {
       throw new Error("User email is required");
@@ -227,7 +208,6 @@ class JobModel {
     return acceptedJobs;
   }
 
-  // Remove accepted job (mark as done or cancel)
   async removeAcceptedJob(acceptedJobId, userEmail) {
     if (!ObjectId.isValid(acceptedJobId)) {
       throw new Error("Invalid accepted job ID format");
@@ -245,7 +225,6 @@ class JobModel {
     return result;
   }
 
-  // Get statistics (optional - useful for admin/analytics)
   async getStats() {
     const totalJobs = await this.collection.countDocuments();
     const totalAcceptedJobs =

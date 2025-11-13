@@ -8,7 +8,6 @@ const JobModel = require("./models/job.model");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Middleware
 app.use(
   cors({
     origin: [
@@ -21,38 +20,20 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Root route
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Freelance Marketplace API is running!",
-    version: "1.0.0",
-    endpoints: {
-      jobs: "/api/jobs",
-      latestJobs: "/api/jobs/latest",
-      myJobs: "/api/jobs/my-jobs/:email",
-      acceptJob: "/api/jobs/accept",
-      acceptedJobs: "/api/jobs/accepted/:email",
-    },
+    message: "Freelance Marketplace API is running",
   });
 });
 
-// Health check
 app.get("/health", (req, res) => {
-  res.json({
-    success: true,
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-  });
+  res.json({ success: true, status: "healthy" });
 });
 
-// API Routes
 app.use("/api/jobs", jobRoutes);
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -61,7 +42,6 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(err.status || 500).json({
@@ -71,31 +51,25 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
 async function startServer() {
   try {
-    // Connect to database
     const db = await connectDB();
 
-    // Create indexes
     const jobModel = new JobModel(db);
     await jobModel.createIndexes();
 
-    // Start Express server
     app.listen(port, () => {
-      console.log(`🚀 Server is running on port ${port}`);
-      console.log(`📍 Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🌐 API URL: http://localhost:${port}`);
+      console.log(`Server running on port ${port}`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
     });
   } catch (error) {
-    console.error("❌ Failed to start server:", error);
+    console.error("Failed to start server:", error);
     process.exit(1);
   }
 }
 
-// Graceful shutdown
 process.on("SIGINT", async () => {
-  console.log("\n🔄 Shutting down gracefully...");
+  console.log("\nShutting down...");
   await closeDB();
   process.exit(0);
 });
