@@ -71,4 +71,5 @@ POST /api/jobs/accept
 
 - Users can only update/delete their own jobs
 - Users cannot accept their own job postings
+- Users can complete/cancel their accepted jobs
 - All responses return JSON with success status
