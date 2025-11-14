@@ -36,7 +36,7 @@ npm run dev
 ```json
 POST /api/jobs
 {
-  "title": "Build React Website",
+  "title": "Build Website",
   "postedBy": "John Doe",
   "category": "Web Development",
   "summary": "Description here",
