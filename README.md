@@ -4,15 +4,6 @@ Backend API for the Freelance Marketplace (Assignment B12-A10).
 
 ## Setup
 
-Create `.env` file:
-
-```
-MONGODB_URI=your_mongodb_uri
-DB_NAME=freelanceMarketplace
-PORT=5000
-CLIENT_URL=http://localhost:5173
-```
-
 Install dependencies:
 
 ```bash
